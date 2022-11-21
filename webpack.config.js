@@ -9,25 +9,39 @@ const widgetName = package.name;
 const widgetNameContext = widgetName + "Context";
 const widgetVersion = package.version;
 
- module.exports = {
+module.exports = {
     entry: {
-        [widgetName]: [ "core-js/es/promise", `./src/${widgetName}/widget/${widgetName}.js` ],
-        [widgetNameContext]: [ "core-js/es/promise", `./src/${widgetName}/widget/${widgetNameContext}.js` ],
+        [widgetName]: [
+            "core-js/es/promise",
+            `./src/${widgetName}/widget/${widgetName}.js`,
+        ],
+        [widgetNameContext]: [
+            "core-js/es/promise",
+            `./src/${widgetName}/widget/${widgetNameContext}.js`,
+        ],
     },
     output: {
         path: path.resolve(__dirname, "dist/tmp/src"),
         filename: `${widgetName}/widget/[name].js`,
         chunkFilename: `${widgetName}/widget/${widgetName}[id].js`,
         libraryTarget: "amd",
-        publicPath: "/widgets/"
+        publicPath: "/widgets/",
+        jsonpFunction: "html2snippetwidget",
     },
     devtool: false,
     mode: "production",
-    externals: [ /^mxui\/|^mendix\/|^dojo\/|^dijit\// ],
+    externals: [/^mxui\/|^mendix\/|^dojo\/|^dijit\//],
     plugins: [
         new webpack.LoaderOptionsPlugin({ debug: true }),
         new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: "dist/tmp" }),
-        new CopyWebpackPlugin([ {context: "src", from: "**/*.xml", debug: true} ], { copyUnmodified: true }),
-        new ZipPlugin({ path: `../../${widgetVersion}`, filename: widgetName, extension: "mpk" })
-    ]
+        new CopyWebpackPlugin(
+            [{ context: "src", from: "**/*.xml", debug: true }],
+            { copyUnmodified: true }
+        ),
+        new ZipPlugin({
+            path: `../../${widgetVersion}`,
+            filename: widgetName,
+            extension: "mpk",
+        }),
+    ],
 };
